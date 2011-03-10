@@ -52,12 +52,13 @@ class SpotNzb {
 		
 		# create an stream context to be able to pass certain parameters
 		$ctx = stream_context_create(array('http' => array('timeout' => 10)));
-		$output = @file_get_contents($url, 0, $ctx);
+		$output = @file_get_contents(str_replace(' ', '%20', $url), 0, $ctx);
+
 		if ($output	=== false) {
 			throw new Exception("Unable to open sabnzbd url: " . $url);
 		} # if
-		
-		if ($output != "OK") {
+
+		if (trim(strtolower($output)) != "ok") {
 			throw new Exception("sabnzbd returned: " . $output);
 		} # if
 	} # runHttp
